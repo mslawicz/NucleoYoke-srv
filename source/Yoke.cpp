@@ -2,9 +2,13 @@
 
 Yoke::Yoke(events::EventQueue& eventQueue) :
     eventQueue(eventQueue),
-    systemLed(LED1)
+    systemLed(LED1),
+    tensometerThread(osPriorityBelowNormal),
+    pitchTensometer(PA_0, PA_1, eventQueue)
 {
     printf("Yoke object created\r\n");
+    // tensometer queue will be dispatched in another thread
+    tensometerThread.start(callback(&tensometerQueue, &EventQueue::dispatch_forever));
 
     //XXX temporary heartbeat for test
     eventQueue.call_every(500, callback(this, &Yoke::handler));
