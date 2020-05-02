@@ -26,4 +26,6 @@ void Yoke::handler(void)
 
     // LED heartbeat
     systemLed = ((counter & 0x68) == 0x68);
+
+    pitchServo.setValue(0.2f * sin(counter / 100.0f) + 0.5f);
 }
