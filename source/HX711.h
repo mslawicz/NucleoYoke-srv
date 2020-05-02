@@ -15,7 +15,7 @@ private:
     InterruptIn data;           // interrupt and data pin
     EventQueue& eventQueue;     // event queue for HX711 data readouts
     uint8_t totalPulses;        // number of pulses to generate <25-27>
-    uint32_t dataRegister;      // data read from the chip
+    uint32_t dataRegister{0};   // data read from the chip
 };
 
 #endif /* HX711_H_ */
