@@ -6,6 +6,7 @@
  * @param pwmPin PwmOut pin to connect to
  * @param minPulseWidth float minimum input value in [ms]
  * @param maxPulseWidth float maximum input value in [ms]
+ * @param startValue float start value in the range 0..1
  * @param reverse bool reverses the direction of servo movement
  */
 Servo::Servo(PinName pwmPin, float minPulseWidth, float maxPulseWidth, float startValue, bool reverse) :
