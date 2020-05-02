@@ -22,5 +22,5 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
 void Yoke::handler(void)
 {
     systemLed = !systemLed;
-    printf("F=0x%08X\r\n", pitchTensometer.getData());
+    printf("dr=0x%08X   v=%f\r\n", pitchTensometer.getDataRegister(), pitchTensometer.getValue());
 }

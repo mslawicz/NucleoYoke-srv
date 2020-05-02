@@ -7,7 +7,8 @@ class HX711
 {
 public:
     HX711(PinName clockPin, PinName dataPin, EventQueue& eventQueue, uint8_t totalPulses = 25);
-    uint32_t getData(void) const { return dataRegister; }
+    uint32_t getDataRegister(void) const { return dataRegister; }
+    float getValue(void) const { return 1.0f * static_cast<int32_t>(dataRegister << 8) / 0xFFFFFF00; }
 private:
     void read(void);            // reads data from HX711 chip
     DigitalOut clock;           // clock pin
