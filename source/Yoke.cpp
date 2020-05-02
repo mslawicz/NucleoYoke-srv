@@ -24,7 +24,6 @@ void Yoke::handler(void)
 {
     counter++;
 
-    // 1 second LED heartbeat
-    uint8_t phase = counter % 100;
-    systemLed = (phase <= 10) || ((phase >= 20) && (phase <= 30)) ? 1 : 0;
+    // LED heartbeat
+    systemLed = ((counter & 0x68) == 0x68);
 }
