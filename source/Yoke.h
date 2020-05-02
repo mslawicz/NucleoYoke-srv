@@ -18,6 +18,9 @@ private:
     HX711 pitchTensometer;              // pitch force tensometer object
     Servo pitchServo;                   // servo for yoke pitch
     uint32_t counter{0};                // counter of handler execution
+    AnalogIn propellerPotentiometer;    // propeller potentiometer object 
+    Timer handlerTimer;                 // measures time between handler calls
+    float yokePitch{0.0f};              // yoke pitch deflection from refference position
 };
 
 #endif /* YOKE_H_ */
