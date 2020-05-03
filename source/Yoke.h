@@ -3,6 +3,7 @@
 
 #include "HX711.h"
 #include "Servo.h"
+#include "Filter.h"
 #include <mbed.h>
 
 class Yoke
@@ -16,6 +17,7 @@ private:
     EventQueue tensometerQueue;         // tensometer event queue
     Thread tensometerThread;            // low priority thread for readout tensometer data
     HX711 pitchTensometer;              // pitch force tensometer object
+    FilterSMA pitchForceFilter;         // filter of the pitch force values
     Servo pitchServo;                   // servo for yoke pitch
     uint32_t counter{0};                // counter of handler execution
     AnalogIn propellerPotentiometer;    // propeller potentiometer object 
