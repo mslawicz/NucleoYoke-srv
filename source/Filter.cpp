@@ -17,3 +17,15 @@ void FilterSMA::calculate(float input)
     dataBuffer[currentElement] = input;
     currentElement = (currentElement + 1) % filterSize;
 }
+
+void FilterAEMA::calculate(float input)
+{
+    float delta = input - filterValue;
+    filteredDeviation = filteredDeviation * (1.0f - DeviationFilterStrength) + fabs(delta) * DeviationFilterStrength;
+    float alpha = FilterStrength * fabs(delta) / filteredDeviation;
+    if(alpha > 1.0f)
+    {
+        alpha = 1.0f;
+    }
+    filterValue += delta * alpha;
+}

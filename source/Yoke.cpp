@@ -9,7 +9,6 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
     systemLed(LED1),
     tensometerThread(osPriorityBelowNormal),
     pitchTensometer(PD_1, PD_0, eventQueue),
-    pitchForceFilter(20),
     pitchServo(PC_6, 1e-3, 2e-3, 0.5f),
     propellerPotentiometer(PC_3)
 {
@@ -38,19 +37,20 @@ void Yoke::handler(void)
     systemLed = ((counter & 0x68) == 0x68);
 
     float pot = propellerPotentiometer.read();
+    float alpha = 0.5f * pot;
     float force = -1.0f * pitchTensometer.getValue();
     pitchForceFilter.calculate(force);
     float filteredForce = pitchForceFilter.getValue();
-    float feedback = 0.05f * yokePitch;
-    yokePitch += filteredForce - feedback;
-    //pitchServo.setValue(0.5f + yokePitch);
+
+    yokePitch = (1.0f - alpha) * (yokePitch + filteredForce) - alpha * yokePitch;
+    pitchServo.setValue(0.5f + yokePitch);
 
     g_force = force;
     g_filteredForce = filteredForce;
 
     if(counter % 50 == 0)
     {
-        printf("pot=%f  fo=%f  fi=%f  fe=%f  pi=%f\r\n", pot, force, filteredForce, feedback, yokePitch);
+        printf("pot=%f  al=%f  fo=%f  fi=%f  pi=%f\r\n", pot, alpha, force, filteredForce, yokePitch);
         //printf("force=%f  filter=%f\r\n", force, filteredForce);
     }
 }
