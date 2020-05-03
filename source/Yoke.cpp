@@ -1,15 +1,15 @@
 #include "Yoke.h"
 
 //XXX global variables for test
-float g_force;
-float g_filteredForce;
-float g_pitch;
+float g_pitchForce;
+float g_rollForce;
 
 Yoke::Yoke(events::EventQueue& eventQueue) :
     eventQueue(eventQueue),
     systemLed(LED1),
     tensometerThread(osPriorityBelowNormal),
-    pitchTensometer(PD_1, PD_0, eventQueue),
+    pitchTensometer(PD_0, PD_1, tensometerQueue),
+    rollTensometer(PF_8, PF_9, tensometerQueue),
     pitchForceFilter(20),
     propellerPotentiometer(PC_3)
 {
@@ -37,21 +37,15 @@ void Yoke::handler(void)
     // LED heartbeat
     systemLed = ((counter & 0x68) == 0x68);
 
-    float pot = propellerPotentiometer.read();
-    float alpha = 0.5f * pot;
-    float force = -1.0f * pitchTensometer.getValue();
-    pitchForceFilter.calculate(force);
-    float filteredForce = pitchForceFilter.getValue();
+    //float pot = propellerPotentiometer.read();
+    float pitchForce = pitchTensometer.getValue();
+    float rollForce = rollTensometer.getValue();
 
-    yokePitch = 10.0f * pot * filteredForce;
-
-    g_force = force;
-    g_filteredForce = filteredForce;
-    g_pitch = yokePitch;
+    g_pitchForce = pitchForce;
+    g_rollForce = rollForce;
 
     if(counter % 50 == 0)
     {
-        printf("pot=%f  al=%f  fo=%f  fi=%f  pi=%f\r\n", pot, alpha, force, filteredForce, yokePitch);
-        //printf("force=%f  filter=%f\r\n", force, filteredForce);
+        printf("pf=%f  rf=%f\r\n", pitchForce, rollForce);
     }
 }

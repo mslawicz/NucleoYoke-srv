@@ -2,10 +2,11 @@
 
 /*
 create HX711 object and set interrupt
+use unique dataPin bus!
 */
-HX711::HX711(PinName clockPin, PinName dataPin, EventQueue& eventQueue, uint8_t totalPulses) :
-    clock(clockPin, 0),
+HX711::HX711(PinName dataPin, PinName clockPin, EventQueue& eventQueue, uint8_t totalPulses) :
     data(dataPin, PullUp),
+    clock(clockPin, 0),
     eventQueue(eventQueue),
     totalPulses(totalPulses)
 {

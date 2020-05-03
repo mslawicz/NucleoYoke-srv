@@ -13,9 +13,10 @@ private:
     void handler(void);
     events::EventQueue& eventQueue;     // event queue of the main thread
     DigitalOut systemLed;               // yoke heartbeat LED
-    EventQueue tensometerQueue;         // tensometer event queue
+    events::EventQueue tensometerQueue; // tensometer event queue
     Thread tensometerThread;            // low priority thread for readout tensometer data
     HX711 pitchTensometer;              // pitch force tensometer object
+    HX711 rollTensometer;               // roll force tensometer object
     FilterSMA pitchForceFilter;         // filter of the pitch force values
     uint32_t counter{0};                // counter of handler execution
     AnalogIn propellerPotentiometer;    // propeller potentiometer object 
