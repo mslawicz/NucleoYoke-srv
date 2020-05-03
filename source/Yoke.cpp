@@ -11,7 +11,6 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
     tensometerThread(osPriorityBelowNormal),
     pitchTensometer(PD_1, PD_0, eventQueue),
     pitchForceFilter(20),
-    pitchServo(PC_6, 1e-3, 2e-3, 0.5f),
     propellerPotentiometer(PC_3)
 {
     printf("Yoke object created\r\n");
@@ -45,7 +44,6 @@ void Yoke::handler(void)
     float filteredForce = pitchForceFilter.getValue();
 
     yokePitch = 10.0f * pot * filteredForce;
-    pitchServo.setValue(0.5f + yokePitch);
 
     g_force = force;
     g_filteredForce = filteredForce;
