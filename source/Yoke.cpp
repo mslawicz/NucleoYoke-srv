@@ -1,5 +1,9 @@
 #include "Yoke.h"
 
+//XXX global variables for test
+float g_force;
+float g_filteredForce;
+
 Yoke::Yoke(events::EventQueue& eventQueue) :
     eventQueue(eventQueue),
     systemLed(LED1),
@@ -34,12 +38,17 @@ void Yoke::handler(void)
 
     float pot = propellerPotentiometer.read();
     float force = -1.0f * pitchTensometer.getValue() * pot;
-    float feedback = 0.03f * yokePitch;
-    yokePitch += force - feedback;
+    float filteredForce = force;
+    float feedback = 0.05f * yokePitch;
+    yokePitch += filteredForce - feedback;
     pitchServo.setValue(0.5f + yokePitch);
+
+    g_force = force;
+    g_filteredForce = filteredForce;
 
     if(counter % 50 == 0)
     {
-        printf("pot=%f  fo=%f  fe=%f  pi=%f\r\n", pot, force, feedback, yokePitch);
+        printf("pot=%f  fo=%f  fi=%f  fe=%f  pi=%f\r\n", pot, force, filteredForce, feedback, yokePitch);
+        //printf("force=%f  filter=%f\r\n", force, filteredForce);
     }
 }
