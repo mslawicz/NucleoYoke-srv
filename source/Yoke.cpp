@@ -3,12 +3,14 @@
 //XXX global variables for test
 float g_force;
 float g_filteredForce;
+float g_pitch;
 
 Yoke::Yoke(events::EventQueue& eventQueue) :
     eventQueue(eventQueue),
     systemLed(LED1),
     tensometerThread(osPriorityBelowNormal),
     pitchTensometer(PD_1, PD_0, eventQueue),
+    pitchForceFilter(20),
     pitchServo(PC_6, 1e-3, 2e-3, 0.5f),
     propellerPotentiometer(PC_3)
 {
@@ -42,11 +44,12 @@ void Yoke::handler(void)
     pitchForceFilter.calculate(force);
     float filteredForce = pitchForceFilter.getValue();
 
-    yokePitch = (1.0f - alpha) * (yokePitch + filteredForce) - alpha * yokePitch;
+    yokePitch = 10.0f * pot * filteredForce;
     pitchServo.setValue(0.5f + yokePitch);
 
     g_force = force;
     g_filteredForce = filteredForce;
+    g_pitch = yokePitch;
 
     if(counter % 50 == 0)
     {
