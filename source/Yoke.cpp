@@ -7,11 +7,9 @@ float g_rollForce;
 Yoke::Yoke(events::EventQueue& eventQueue) :
     eventQueue(eventQueue),
     systemLed(LED2),
-    tensometerThread(osPriorityBelowNormal),
-    pitchTensometer(PD_0, PD_1, tensometerQueue),
-    rollTensometer(PF_8, PF_9, tensometerQueue),
+    pitchTensometer(PD_0, PD_1, eventQueue),
+    rollTensometer(PF_8, PF_9, eventQueue),
     pitchForceFilter(20),
-    propellerPotentiometer(PC_3)
     flapsUpSwitch(PB_15, PullUp),
     flapsDownSwitch(PB_13, PullUp),
     gearUpSwitch(PF_4, PullUp),
@@ -23,9 +21,7 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
     throttlePotentiometer(PC_5),
     propellerPotentiometer(PC_4),
     mixturePotentiometer(PB_1),
-    joystickGainPotentiometer(PA_2),
-    tinyJoystickX(PC_3),
-    tinyJoystickY(PC_2),
+    joystickGainPotentiometer(PA_2)
 {
     printf("Yoke object created\r\n");
 
@@ -43,26 +39,14 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
 void Yoke::handler(void)
 {
     counter++;
-    float dt = 1e-3 * handlerTimer.elapsed_time().count();
-    float deltaT = std::chrono::duration<float>(handlerTimer.elapsed_time()).count();
+    float dt = std::chrono::duration<float>(handlerTimer.elapsed_time()).count();
     handlerTimer.reset();
 
 
     // request new tensometer readouts
-    leftPedalTensometer.readRequest();
-    rightPedalTensometer.readRequest();
+    pitchTensometer.readRequest();
+    rollTensometer.readRequest();
     // LED heartbeat
     systemLed = ((counter & 0x68) == 0x68);
 
-    //float pot = propellerPotentiometer.read();
-    float pitchForce = pitchTensometer.getValue();
-    float rollForce = rollTensometer.getValue();
-
-    g_pitchForce = pitchForce;
-    g_rollForce = rollForce;
-
-    if(counter % 50 == 0)
-    {
-        printf("pf=%f  rf=%f\r\n", pitchForce, rollForce);
-    }
 }
