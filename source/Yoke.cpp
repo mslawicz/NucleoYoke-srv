@@ -21,7 +21,8 @@ Yoke::Yoke(events::EventQueue& eventQueue) :
     throttlePotentiometer(PC_5),
     propellerPotentiometer(PC_4),
     mixturePotentiometer(PB_1),
-    joystickGainPotentiometer(PA_2)
+    joystickGainPotentiometer(PA_2),
+    pitchServo(PC_9, 0.57f, 2.45f, 0.5f)
 {
     printf("Yoke object created\r\n");
 
@@ -46,6 +47,14 @@ void Yoke::handler(void)
     // request new tensometer readouts
     pitchTensometer.readRequest();
     rollTensometer.readRequest();
+
+    float position = mixturePotentiometer.read();
+    pitchServo.setValue(position);
+    if(counter % 100 == 0)
+    {
+        printf("pos=%f\n", position);
+    }
+
     // LED heartbeat
     systemLed = ((counter & 0x68) == 0x68);
 

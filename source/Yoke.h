@@ -3,6 +3,7 @@
 
 #include "HX711.h"
 #include "Filter.h"
+#include "Servo.h"
 #include <mbed.h>
 
 class Yoke
@@ -31,6 +32,7 @@ private:
     AnalogIn propellerPotentiometer;
     AnalogIn mixturePotentiometer;
     AnalogIn joystickGainPotentiometer;
+    Servo pitchServo;
 };
 
 #endif /* YOKE_H_ */
