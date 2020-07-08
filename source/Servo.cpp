@@ -4,8 +4,8 @@
 /** create servo object
  *
  * @param pwmPin PwmOut pin to connect to
- * @param minPulseWidth float minimum input value in [ms]
- * @param maxPulseWidth float maximum input value in [ms]
+ * @param minPulseWidth float minimum input value in [s]
+ * @param maxPulseWidth float maximum input value in [s]
  * @param startValue float start value in the range 0..1
  * @param reverse bool reverses the direction of servo movement
  */
